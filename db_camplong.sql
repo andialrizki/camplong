@@ -11,7 +11,7 @@
  Target Server Version : 100131
  File Encoding         : 65001
 
- Date: 05/12/2018 11:02:12
+ Date: 19/01/2019 22:01:15
 */
 
 SET NAMES utf8mb4;
@@ -746,12 +746,13 @@ CREATE TABLE `customer`  (
   `customer_city_id` int(11) NULL DEFAULT NULL,
   `customer_subdistrict_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`customer_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of customer
 -- ----------------------------
-INSERT INTO `customer` VALUES (1, 'Andi', 'andi@gmail.com', '085754154674', '$2y$12$Wj14zsg1qaJ78IEWYGfJjuakCqS9t.XmpX8rYFOErP/xqErPEznY6', 'customer_default_img.jpg', '0', NULL, 1, NULL, NULL, NULL);
+INSERT INTO `customer` VALUES (1, 'Andi', 'andi@gmail.com', '085754154674', '$2y$12$Wj14zsg1qaJ78IEWYGfJjuakCqS9t.XmpX8rYFOErP/xqErPEznY6', 'customer_default_img.jpg', '0', 'Pembuang Hulu', 1, 14, 405, 5595);
+INSERT INTO `customer` VALUES (2, 'juki', 'juki@gmail.com', '0812345678', '$2y$12$nZQmgldeUXQYcgs7Sxk05.fRUu3D/8xHmNb8XfjBvihA3QDeU4jAy', 'customer_default_img.jpg', '0', NULL, 1, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for owner
@@ -891,7 +892,7 @@ CREATE TABLE `seller`  (
 -- Records of seller
 -- ----------------------------
 INSERT INTO `seller` VALUES (1, 'Wiranto', 'wiranto@gmail.com', '08123456789', '$2y$12$N8O/hrSS8DOaHZOYJJw0AOCtJ2D/BzdZEJGiLt8TFehtu0DzoRhqG', 'seller_default_img.jpg', '0', 'Jl. Raya Tlogomas No. 246', 1, 11, 390, 5395);
-INSERT INTO `seller` VALUES (2, 'udin', 'udin@gmail.com', '0812345678', '$2y$12$YycnqjERZbjLfceZZNYb0.hzyUI1kV4Qs6XydvObAuBxJEiL5Ur4S', 'seller_default_img.jpg', '70000', 'Jl. camplong', 1, 11, 390, 5395);
+INSERT INTO `seller` VALUES (2, 'udin', 'udin@gmail.com', '0812345678', '$2y$12$YycnqjERZbjLfceZZNYb0.hzyUI1kV4Qs6XydvObAuBxJEiL5Ur4S', 'seller_default_img.jpg', '146000', 'Jl. camplong', 1, 11, 390, 5395);
 
 -- ----------------------------
 -- Table structure for seller_bank
@@ -906,6 +907,43 @@ CREATE TABLE `seller_bank`  (
   `bank_seller_id` int(11) NOT NULL,
   PRIMARY KEY (`bank_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for seller_location
+-- ----------------------------
+DROP TABLE IF EXISTS `seller_location`;
+CREATE TABLE `seller_location`  (
+  `selloc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `selloc_lat` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `selloc_lng` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `selloc_zoom` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `selloc_map_type` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `selloc_seller_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`selloc_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of seller_location
+-- ----------------------------
+INSERT INTO `seller_location` VALUES (1, '-7.214243046961227', '113.33367347717287', '14', 'HYBRID', 2);
+
+-- ----------------------------
+-- Table structure for seller_rating
+-- ----------------------------
+DROP TABLE IF EXISTS `seller_rating`;
+CREATE TABLE `seller_rating`  (
+  `rating_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rating` float(11, 2) NULL DEFAULT NULL,
+  `rating_transaction_id` int(11) NOT NULL,
+  `rating_seller_id` int(11) NOT NULL,
+  PRIMARY KEY (`rating_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of seller_rating
+-- ----------------------------
+INSERT INTO `seller_rating` VALUES (1, 4.00, 1, 2);
+INSERT INTO `seller_rating` VALUES (2, 3.00, 2, 2);
 
 -- ----------------------------
 -- Table structure for subdistrict
@@ -7946,12 +7984,13 @@ CREATE TABLE `transaction`  (
   `transaction_seller_id` int(11) NULL DEFAULT NULL,
   `transaction_customer_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`transaction_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
 INSERT INTO `transaction` VALUES (1, 'CPG-5BD677E44D49B', 'jne', 'REG', 40000, '070820049067618', 30000, 70000, 1000, NULL, 5, 'Andi', 'jl. tlogomas', '085754154674', 11, 256, 3637, '65144', 2, 1);
+INSERT INTO `transaction` VALUES (2, 'CPG-5C4339CF1702C', 'J&T', 'EZ', 46000, '070820049067618', 30000, 76000, 1000, NULL, 5, 'juki', 'lowokratu', '085754154674', 11, 256, 3637, '65144', 2, 2);
 
 -- ----------------------------
 -- Table structure for transaction_confirm
@@ -7970,12 +8009,13 @@ CREATE TABLE `transaction_confirm`  (
   `transconf_bank_id` int(11) NULL DEFAULT NULL,
   `transconf_transaction_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`transconf_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of transaction_confirm
 -- ----------------------------
 INSERT INTO `transaction_confirm` VALUES (1, 'BNI', '11223344556677', 'ANDI', 70000, '2018-10-29', 'CONFIRM-CPG-5BD677E44D49B.png', 2, 'bukti tidak sah', 1, 1);
+INSERT INTO `transaction_confirm` VALUES (2, 'BNI', '121212112', 'juki', 76000, '2018-10-29', 'CONFIRM-CPG-5C4339CF1702C.jpg', 2, NULL, 1, 2);
 
 -- ----------------------------
 -- Table structure for transaction_product
@@ -7989,11 +8029,12 @@ CREATE TABLE `transaction_product`  (
   `transprod_transaction_id` int(11) NOT NULL,
   `transprod_product_id` int(11) NOT NULL,
   PRIMARY KEY (`transprod_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of transaction_product
 -- ----------------------------
 INSERT INTO `transaction_product` VALUES (1, 30000, 1, 1000, 1, 5);
+INSERT INTO `transaction_product` VALUES (2, 30000, 1, 1000, 2, 5);
 
 SET FOREIGN_KEY_CHECKS = 1;
