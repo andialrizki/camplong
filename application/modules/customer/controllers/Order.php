@@ -50,6 +50,30 @@ class Order extends CI_Controller
 			redirect('customer/order');
 		}
 	}
+	function rating($code='')
+	{
+		$cust = getCustomerSession();
+		$val = $this->input->post('value');
+		$cek = $this->db->get_where('transaction', ['transaction_code'=>$code, 'transaction_customer_id'=>$cust->id]);
+		if ($cek->num_rows() > 0) {
+			$ceklg = $this->db->get_where('seller_rating', ['rating_transaction_id'=>$cek->row()->transaction_id]);
+			if ($ceklg->num_rows() > 0) {
+				$this->db->update('seller_rating', ['rating'=>$val], ['rating_transaction_id'=>$cek->row()->transaction_id]);
+			} else {
+				$this->db->insert('seller_rating', 
+					[
+						'rating'=>$val, 
+						'rating_seller_id'=>$cek->row()->transaction_seller_id, 
+						'rating_transaction_id'=>$cek->row()->transaction_id
+					]);
+			}
+			$this->session->set_flashdata('alert', ['status'=>'success', 'message'=>'Nilai untuk transaksi ini telah disimpan.']);
+			redirect('customer/order/detail/'.$code);
+		} else {
+			$this->session->set_flashdata('alert', ['status'=>'error', 'message'=>'Transaksi tidak ditemukan']);
+			redirect('customer/order');
+		}
+	}
 	function tracking($code='')
 	{
 		$cust = getCustomerSession();

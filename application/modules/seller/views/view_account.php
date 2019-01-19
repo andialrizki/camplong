@@ -1,4 +1,5 @@
 <?php $this->load->view('themes/front/view_header', ['title' => 'Akun Anda']) ?>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>public/vendor/leaflet/leaflet.css">
   <br>
   <div class="container">
     <div class="row justify-content-center">
@@ -50,7 +51,12 @@
               </div>
               <div class="form-group">
                 <label>Lokasi dari peta</label>
-                <div id="map" style="height: 400px;"></div>
+                <div id="mapx" style="height: 320px"></div>
+                <input type="hidden" name="loc[selloc_lat]" id="lat" value="<?php echo @$loc->selloc_lat ?>"/>
+                <input type="hidden" name="loc[selloc_lng]" id="lng"  value="<?php echo @$loc->selloc_lng ?>"/>
+                <input type="hidden" name="loc[selloc_zoom]" id="zoom"  value="<?php echo @$loc->selloc_zoom ?>"/>
+                <input type="hidden" name="loc[selloc_map_type]" id="map_type"  value="<?php echo @$loc->selloc_map_type ?>"/>
+
               </div>
               <button type="submit" class="btn btn-success btn-block">SIMPAN PERUBAHAN</button>
             </form>
@@ -61,6 +67,7 @@
   </div>
   <br>
 <?php $this->load->view('themes/front/view_footer_script') ?>
+<script type="text/javascript" src="<?php echo base_url() ?>public/vendor/leaflet/leaflet-src.js"></script>
 <script type="text/javascript">
   var seller_city_id = "<?php echo @$data->seller_city_id ?>";
   var seller_subdistrict_id = "<?php echo @$data->seller_subdistrict_id ?>";
@@ -121,48 +128,44 @@
     }
   });
 </script>
-<script>
-  // Note: This example requires that you consent to location sharing when
-  // prompted by your browser. If you see the error "The Geolocation service
-  // failed.", it means you probably did not give permission for the browser to
-  // locate you.
-  var map, infoWindow;
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -34.397, lng: 150.644},
-      zoom: 20
-    });
-    infoWindow = new google.maps.InfoWindow;
+<script type="text/javascript">
+  (function() {
+    setTimeout(function() {peta.invalidateSize();}, 500);
+      //ambil data dari form jika ada
+      let lat = document.getElementById('lat').value;
+      let lng = document.getElementById('lng').value;
+      let zoom = document.getElementById('zoom').value;
+      let type = document.getElementById('map_type').value;
+      if(lat == "")
+        lat = -7.213306382670463;
+      if(lng == "")
+        lng = 113.32054138183595;
+      if(zoom == "")
+        zoom = 18;
+      if (type == "")
+        type = "HYBRID";
 
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
+      //Jika posisi penjual belum ada, maka posisi peta akan daerah camplong
+      let posisi = [lat,lng];
+      let st_zoom = zoom;
+            //Inisialisasi tampilan peta
+      let peta = L.map('mapx').setView(posisi, st_zoom);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        id: 'mapbox.streets'
+      }).addTo(peta);
+      let pin = L.marker(posisi, {draggable: true}).addTo(peta);
+      pin.on('dragend', function(e){
+        document.getElementById('lat').value = e.target._latlng.lat;
+        document.getElementById('lng').value = e.target._latlng.lng;
+        document.getElementById('map_type').value = "HYBRID"
+        document.getElementById('zoom').value = peta.getZoom();
+      })
+      peta.on('zoomstart zoomend', function(e){
+        document.getElementById('zoom').value = peta.getZoom();
+      })
+  })();
 
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter(pos);
-      }, function() {
-        handleLocationError(true, infoWindow, map.getCenter());
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
-    }
-  }
-
-  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ?
-                          'Error: The Geolocation service failed.' :
-                          'Error: Your browser doesn\'t support geolocation.');
-    infoWindow.open(map);
-  }
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $gmaps ?>&callback=initMap">
 </script>
 <?php $this->load->view('themes/front/view_footer') ?>

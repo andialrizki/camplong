@@ -1,4 +1,5 @@
 <?php $this->load->view('themes/front/view_header', ['title' => 'Detail Pesanan']) ?>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>public/css/rating.css">
   <br>
   <div class="container">
     <?php if($data->num_rows() > 0): ?>
@@ -123,6 +124,12 @@
                   <a href="<?php echo site_url('customer/order/received/'.$d->transaction_code) ?>" class="btn btn-primary" onclick="return confirm('Apakah Anda yakin sudah menerima barang dan tidak ada masalah? Jika YA, dana akan diteruskan ke penjual dan status pesanan akan berubah menjadi SELESAI')">Terima Barang</a>
                 </div>
               <?php endif; ?>
+              <?php if($d->transaction_status == 5): ?>
+                <hr>
+                <div class="text-center">
+                  <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#mdl-rating">Beri Nilai</button>
+                </div>
+              <?php endif; ?>
             </div>
           </div>
         </div>
@@ -132,5 +139,51 @@
     <?php endif; ?>
   </div>
   <br>
+  <?php if($d->transaction_status == 5): ?>
+    <?php $rtg = 0; ?>
+    <?php $cekrtg = $this->db->get_where('seller_rating', ['rating_transaction_id'=>$d->transaction_id]); ?>
+    <?php if($cekrtg->num_rows() > 0 ){
+      $rtg = $cekrtg->row()->rating;
+    } ?>
+  <div class="modal fade" id="mdl-rating" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Beri Nilai</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="<?php echo site_url('customer/order/rating/'.$code) ?>" method="post">
+            <section class='rating-widget mt-3'>
+              <!-- Rating Stars Box -->
+              <div class='rating-stars text-center'>
+                <ul id='stars'>
+                  <?php for($i=1; $i<=5; $i++): ?>
+                    <li class='star <?php echo ($i <= $rtg ? 'selected':'') ?>' data-value='<?php echo $i ?>'>
+                      <i class='fa fa-star fa-fw'></i>
+                    </li>
+                  <?php endfor; ?>
+                </ul>
+              </div>            
+            </section>
+            <div class="text-center">
+              <input type="hidden" name="value" id="value">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
 <?php $this->load->view('themes/front/view_footer_script') ?>
+<script type="text/javascript" src="<?php echo base_url() ?>public/js/rating.js"></script>
+<script type="text/javascript">
+  $('.star').click(function () {
+    let v = $(this).attr('data-value');
+    $("#value").val(v);
+  })
+</script>
 <?php $this->load->view('themes/front/view_footer') ?>

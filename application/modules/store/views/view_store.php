@@ -15,6 +15,12 @@
                 <strong class="card-text">Rp<?php echo number_format($d->product_price) ?></strong>
                 <br>
                 <small class="font-italic"><?php echo $d->seller_name ?></small>
+                <br>
+                <small class="font-italic">
+                  <?php for ($i=1; $i <= floor($d->rating); $i++):?>
+                    <i class="fa fa-star" style="color: orange"></i> 
+                  <?php endfor; ?>
+                </small>
               </div>
               <div class="text-center mt-auto">
                 <a href="<?php echo site_url('store/product/detail/'.$d->product_url) ?>" class="btn btn-primary btn-sm">DETAIL</a> 
