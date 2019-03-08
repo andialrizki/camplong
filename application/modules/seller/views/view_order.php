@@ -9,6 +9,26 @@
             <hr>
           </div>
         </div>
+        <div class="card mb-2">
+          <div class="card-body">
+            <form action="<?php echo site_url('seller/order/recap') ?>" method="get">
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Filter Berdasarkan :</label>
+                <div class="col-sm-3">
+                  <select class="form-control" onchange="changeFilter(this.value);" name="filter">
+                    <option value="all" <?php echo ($filter == "all"?'selected':'') ?>>Semua</option>
+                    <option value="not-confirm" <?php echo ($filter == "not-confirm"?'selected':'') ?>>Belum Dikonfirmasi</option>
+                    <option value="shipping" <?php echo ($filter == "shipping"?'selected':'') ?>>Dikirim</option>
+                    <option value="finish" <?php echo ($filter == "finish"?'selected':'') ?>>Selesai</option>
+                  </select>
+                </div>
+                <div class="col-sm-3">
+                  <button class="btn btn-success" type="submit"><i class="fa fa-download"></i> Unduh Rekap</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
         <div class="list-group">
           <?php foreach ($data as $d): ?>
             <?php 
@@ -41,4 +61,9 @@
   </div>
   <br>
 <?php $this->load->view('themes/front/view_footer_script') ?>
+<script type="text/javascript">
+  function changeFilter(val) {
+    window.location = "<?php echo site_url('seller/order?filter=') ?>" + val;
+  }
+</script>
 <?php $this->load->view('themes/front/view_footer') ?>

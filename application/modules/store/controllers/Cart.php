@@ -92,6 +92,7 @@ class Cart extends CI_Controller
 		foreach ($cr as $d) {
 			$code = "CPG-".strtoupper(uniqid());
 			$data['transaction_code'] = $code;
+			$data['transaction_datetime'] = date('Y-m-d H:i:s');
 			$data['transaction_seller_id']	= $d['seller_id'];
 			$data['transaction_customer_id'] = $cust->id;
 

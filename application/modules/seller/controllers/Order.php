@@ -16,12 +16,68 @@ class Order extends CI_Controller
 	function index()
 	{
 		$seller = getSellerSession();
-		$data['data']	 = $this->db
-			->join('customer', 'customer_id = transaction_customer_id')
-			->join('transaction_confirm', 'transaction_id = transconf_transaction_id')
-			->get_where('transaction', ['transaction_seller_id'=>$seller->id])
-			->result();
+		$filter = $this->input->get('filter');
+		if ($filter == "not-confirm") {
+			$status = 2;
+		} elseif ($filter == "shipping") {
+			$status = 4;
+		} elseif ($filter == "finish") {
+			$status = 5;
+		} else {
+			$status = "all";
+		}
+		if ($status == "all"){
+			$data['data']	 = $this->db
+				->join('customer', 'customer_id = transaction_customer_id')
+				->join('transaction_confirm', 'transaction_id = transconf_transaction_id')
+				->get_where('transaction', ['transaction_seller_id'=>$seller->id])
+				->result();
+		} else {
+			$data['data']	 = $this->db
+				->join('customer', 'customer_id = transaction_customer_id')
+				->join('transaction_confirm', 'transaction_id = transconf_transaction_id')
+				->where('transaction_status', $status)
+				->get_where('transaction', ['transaction_seller_id'=>$seller->id])
+				->result();
+		}
+		$data['filter'] = $filter;
 		$this->load->view('view_order', $data);
+	}
+	function recap()
+	{
+		$filename = 'Rekap-Pesanan-di-sistem-camplong-'.date('d-m-y-H-i-s');
+		header("Content-type: application/octet-stream");
+		header("Content-Disposition: attachment; filename=$filename.xls");
+		header('Content-Transfer-Encoding: binary');
+		ob_clean(); flush();
+
+		$seller = getSellerSession();
+		$filter = $this->input->get('filter');
+		if ($filter == "not-confirm") {
+			$status = 2;
+		} elseif ($filter == "shipping") {
+			$status = 4;
+		} elseif ($filter == "finish") {
+			$status = 5;
+		} else {
+			$status = "all";
+		}
+		if ($status == "all"){
+			$data['data']	 = $this->db
+				->join('customer', 'customer_id = transaction_customer_id')
+				->join('transaction_confirm', 'transaction_id = transconf_transaction_id')
+				->get_where('transaction', ['transaction_seller_id'=>$seller->id])
+				->result();
+		} else {
+			$data['data']	 = $this->db
+				->join('customer', 'customer_id = transaction_customer_id')
+				->join('transaction_confirm', 'transaction_id = transconf_transaction_id')
+				->where('transaction_status', $status)
+				->get_where('transaction', ['transaction_seller_id'=>$seller->id])
+				->result();
+		}
+		$data['filter'] = $filter;
+		$this->load->view('xls_order_recap', $data);
 	}
 	function detail($code)
 	{
