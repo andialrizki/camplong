@@ -6,7 +6,7 @@
 </head>
 <body>
   <h4 class="text-center">REKAP DATA PESANAN</h4><br>
-  <table class="table-print">
+  <table class="table-print" border="1">
     <thead>
       <tr>
         <th>No</th>

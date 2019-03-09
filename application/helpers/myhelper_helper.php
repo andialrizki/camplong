@@ -125,6 +125,19 @@
 				return '<span class="text-danger">TIDAK TERSEDIA</span>';
 		}
 	}
+	function statusPencairan($s=0)
+	{
+		switch ($s) {
+			case 1:
+				return '<span class="text-primary">MENGUNGGU KONFIRMASI</span>';
+			case 2:
+				return '<span class="text-warning">DIPROSES</span>';
+			case 3:
+				return '<span class="text-danger">DITOLAK</span>';
+			default:
+				return '<span class="text-success">SELESAI</span>';
+		}
+	}
 	function gramToKg($gr)
 	{
 		if ($gr>=1000) {
