@@ -11,7 +11,7 @@
  Target Server Version : 100131
  File Encoding         : 65001
 
- Date: 19/01/2019 22:01:15
+ Date: 09/03/2019 20:19:13
 */
 
 SET NAMES utf8mb4;
@@ -870,6 +870,26 @@ INSERT INTO `province` VALUES (33, 'Sumatera Selatan');
 INSERT INTO `province` VALUES (34, 'Sumatera Utara');
 
 -- ----------------------------
+-- Table structure for reqfund
+-- ----------------------------
+DROP TABLE IF EXISTS `reqfund`;
+CREATE TABLE `reqfund`  (
+  `reqfund_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reqfund_value` int(11) NOT NULL,
+  `reqfund_datetime` datetime(0) NULL DEFAULT NULL,
+  `reqfund_status` tinyint(1) NULL DEFAULT NULL COMMENT '1.request;2.process;3.reject;4.finish',
+  `reqfund_bank_id` int(11) NULL DEFAULT NULL,
+  `reqfund_seller_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`reqfund_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of reqfund
+-- ----------------------------
+INSERT INTO `reqfund` VALUES (1, 146000, '2019-03-09 08:52:07', 3, 1, 2);
+INSERT INTO `reqfund` VALUES (2, 146000, '2019-03-09 17:23:00', 4, 1, 2);
+
+-- ----------------------------
 -- Table structure for seller
 -- ----------------------------
 DROP TABLE IF EXISTS `seller`;
@@ -892,7 +912,7 @@ CREATE TABLE `seller`  (
 -- Records of seller
 -- ----------------------------
 INSERT INTO `seller` VALUES (1, 'Wiranto', 'wiranto@gmail.com', '08123456789', '$2y$12$N8O/hrSS8DOaHZOYJJw0AOCtJ2D/BzdZEJGiLt8TFehtu0DzoRhqG', 'seller_default_img.jpg', '0', 'Jl. Raya Tlogomas No. 246', 1, 11, 390, 5395);
-INSERT INTO `seller` VALUES (2, 'udin', 'udin@gmail.com', '0812345678', '$2y$12$YycnqjERZbjLfceZZNYb0.hzyUI1kV4Qs6XydvObAuBxJEiL5Ur4S', 'seller_default_img.jpg', '146000', 'Jl. camplong', 1, 11, 390, 5395);
+INSERT INTO `seller` VALUES (2, 'udin', 'udin@gmail.com', '0812345678', '$2y$12$YycnqjERZbjLfceZZNYb0.hzyUI1kV4Qs6XydvObAuBxJEiL5Ur4S', 'seller_default_img.jpg', '0', 'Jl. camplong', 1, 11, 390, 5395);
 
 -- ----------------------------
 -- Table structure for seller_bank
@@ -906,7 +926,12 @@ CREATE TABLE `seller_bank`  (
   `bank_branch` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `bank_seller_id` int(11) NOT NULL,
   PRIMARY KEY (`bank_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of seller_bank
+-- ----------------------------
+INSERT INTO `seller_bank` VALUES (1, 'ANDI', '12345678999', 'Bank Negara Indonesia (BNI)', 'MALANG', 2);
 
 -- ----------------------------
 -- Table structure for seller_location
@@ -7965,6 +7990,7 @@ DROP TABLE IF EXISTS `transaction`;
 CREATE TABLE `transaction`  (
   `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
   `transaction_code` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `transaction_datetime` datetime(0) NULL DEFAULT NULL,
   `transaction_courier` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `transaction_courier_service` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `transaction_courier_cost` int(11) NULL DEFAULT NULL,
@@ -7989,8 +8015,8 @@ CREATE TABLE `transaction`  (
 -- ----------------------------
 -- Records of transaction
 -- ----------------------------
-INSERT INTO `transaction` VALUES (1, 'CPG-5BD677E44D49B', 'jne', 'REG', 40000, '070820049067618', 30000, 70000, 1000, NULL, 5, 'Andi', 'jl. tlogomas', '085754154674', 11, 256, 3637, '65144', 2, 1);
-INSERT INTO `transaction` VALUES (2, 'CPG-5C4339CF1702C', 'J&T', 'EZ', 46000, '070820049067618', 30000, 76000, 1000, NULL, 5, 'juki', 'lowokratu', '085754154674', 11, 256, 3637, '65144', 2, 2);
+INSERT INTO `transaction` VALUES (1, 'CPG-5BD677E44D49B', '2019-03-03 12:01:22', 'jne', 'REG', 40000, '070820049067618', 30000, 70000, 1000, NULL, 5, 'Andi', 'jl. tlogomas', '085754154674', 11, 256, 3637, '65144', 2, 1);
+INSERT INTO `transaction` VALUES (2, 'CPG-5C4339CF1702C', '2019-03-04 10:35:33', 'J&T', 'EZ', 46000, '070820049067618', 30000, 76000, 1000, NULL, 5, 'juki', 'lowokratu', '085754154674', 11, 256, 3637, '65144', 2, 2);
 
 -- ----------------------------
 -- Table structure for transaction_confirm
