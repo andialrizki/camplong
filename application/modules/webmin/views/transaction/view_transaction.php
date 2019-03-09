@@ -120,6 +120,21 @@
           <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
+
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-aqua"><i class="fa fa-list"></i></span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Rekap Transaksi</span>
+            <span class="info-box-number"><?php echo $all ?></span>
+            <a href="<?php echo site_url('webmin/transaction/recap') ?>" class="btn btn-xs btn-info"><i class="fa fa-arrow-circle-right"></i> Selengkapnya</a>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+        
       </div>
       <!-- /.col -->
     </div>

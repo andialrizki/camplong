@@ -20,6 +20,7 @@ Class Overview extends CI_Controller {
 		$data['process']	= $this->db->get_where($this->table, ['transaction_status'=>3])->num_rows();
 		$data['shipping']	= $this->db->get_where($this->table, ['transaction_status'=>4])->num_rows();
 		$data['finish']	= $this->db->get_where($this->table, ['transaction_status'=>5])->num_rows();
+		$data['all']	= $this->db->get($this->table)->num_rows();
 		$data['falied']	= $this->db
 			->where('transaction_status', 6)
 			->or_where('transaction_status', 7)

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Adminstator | Dashboard</title>
+    <title>Adminstator</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.5 -->
@@ -150,13 +150,13 @@
             </li>
             <li class="treeview <?php echo ($url2 == 'reqfund' ? 'active' : '') ?>">
               <a href="#">
-                <i class="fa fa-user"></i>
+                <i class="fa fa-usd"></i>
                 <span>Pencairan Saldo</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?php echo webmin_url('seller/reqfund') ?>"><i class="fa fa-circle-o"></i> Penjual</a></li>
-                <li><a href="<?php echo webmin_url('customer/reqfund') ?>"><i class="fa fa-circle-o"></i> Pembeli</a></li>
+                <!-- <li><a href="<?php echo webmin_url('customer/reqfund') ?>"><i class="fa fa-circle-o"></i> Pembeli</a></li> -->
               </ul>
             </li>
           </ul>
