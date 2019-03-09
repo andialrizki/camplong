@@ -36,6 +36,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="<?php echo site_url('store') ?>">Pasar</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo site_url('page/seller') ?>">Penjual</a>
+              </li>
             </ul>
             <ul class="navbar-nav ml-auto">
               <?php if(!isSellerLogin()): ?>
