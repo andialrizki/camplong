@@ -16,6 +16,7 @@ class Payment extends CI_Controller
 	function index()
 	{
 		$seller = getSellerSession();
+		$data['alert'] = $this->session->alert;
 		$data['me'] = $this->db->get_where('seller',['seller_id'=>$seller->id])->row();
 		$data['bank'] = $this->db->get_where('seller_bank',['bank_seller_id'=>$seller->id])->result();
 		$data['history'] = $this->db
@@ -33,6 +34,34 @@ class Payment extends CI_Controller
 		$this->session->set_flashdata('alert', [
 			'status'=>'success', 
 			'message'=>'Data Rekening Sudah Disimpan']);
+		redirect('seller/payment');
+	}
+	function get_bank()
+	{
+		$id = $this->input->get('id');
+		$seller = getSellerSession();
+		header('Content-Type: application/json');
+		$dt = $this->db->get_where('seller_bank', ['bank_id'=>$id, 'bank_seller_id'=>$seller->id])->row();
+		echo json_encode($dt);
+	}
+	function edit_bank($id)
+	{
+		$seller = getSellerSession();
+		$dt = $this->input->post('post');
+		$this->db->update('seller_bank', $dt, ['bank_seller_id'=>$seller->id, 'bank_id'=>$id]);
+		$this->session->set_flashdata('alert', [
+				'status'=>'success', 
+				'message'=>'Data bank berhasil disimpan']);
+		redirect('seller/payment');
+	}
+	function del_bank($id)
+	{
+		$seller = getSellerSession();
+		$dt = $this->input->post('post');
+		$this->db->delete('seller_bank', ['bank_seller_id'=>$seller->id, 'bank_id'=>$id]);
+		$this->session->set_flashdata('alert', [
+				'status'=>'success', 
+				'message'=>'Data bank berhasil dihapus']);
 		redirect('seller/payment');
 	}
 	function request_fund()

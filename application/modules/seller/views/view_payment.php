@@ -10,6 +10,7 @@
             PENTING:<br> 
             Cermatlah dalam mengisi data rekening bank. Kami tidak bertanggung jawab apabila terjadi hal yang tidak diinginkan akibat kesalahan dalam pengisian data rekening bank yang meliputi nomor rekening, nama pemilik rekening dan nama bank.
           </div>
+          <?php echo showAlert($alert) ?>
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
               <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Pencairan Saldo</a>
@@ -83,7 +84,7 @@
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
               <br>
-              <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#mdl-rekening"><i class="fa fa-plus"></i> Tambah Rekening</button>
+              <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#mdl-rekening" onclick="addBank();"><i class="fa fa-plus"></i> Tambah Rekening</button>
               <hr>
               <table class="table table-bordered">
                 <thead>
@@ -104,8 +105,8 @@
                       <td><?php echo $d->bank_account_name ?></td>
                       <td><?php echo $d->bank_account_number ?></td>
                       <td>
-                        <button class="btn btn-info btn-xs" type="button"><i class="fa fa-edit"></i></button> 
-                        <a href="" class="btn btn-danger btn-xs" onclick="return confirm('Apakah Anda yakin ingin menghapus ini?');"><i class="fa fa-trash"></i></a>
+                        <button class="btn btn-info btn-xs" type="button" onclick="return formEdit('<?php echo $d->bank_id ?>')"><i class="fa fa-edit"></i></button> 
+                        <a href="<?php echo site_url('seller/payment/del_bank/'.$d->bank_id) ?>" class="btn btn-danger btn-xs" onclick="return confirm('Apakah Anda yakin ingin menghapus ini?');"><i class="fa fa-trash"></i></a>
                       </td>
                     </tr>
                     <?php $no++ ?>
@@ -130,7 +131,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="<?php echo site_url('seller/payment/add_bank') ?>" method="post">
+        <form action="<?php echo site_url('seller/payment/add_bank') ?>" method="post" id="form">
           <div class="form-group">
             <label>Nama Bank</label>
             <input type="text" name="post[bank_name]" class="form-control" required>
@@ -156,4 +157,28 @@
   </div>
 </div>
 <?php $this->load->view('themes/front/view_footer_script') ?>
+<script type="text/javascript">
+  let act_def = $("#mdl-rekening #form").attr('action');
+  function formEdit(id) {
+    $("#mdl-rekening #form").attr('action', '<?php echo site_url('seller/payment/edit_bank') ?>/'+id);
+    $.ajax({
+      url: "<?php echo site_url('seller/payment/get_bank') ?>",
+      data:{id:id},
+      type:"GET",
+      dataType:"json",
+      beforeSend: function () {
+        // body...
+      }, success: function(res) {
+        $.each(res, function(i,v) {
+          $("#mdl-rekening .form-control[name='post[" + i + "]']").val(v);
+        });
+        $("#mdl-rekening").modal('toggle');
+      }
+    })
+  }
+  function addBank() {
+    $("#mdl-rekening #form").attr('action', act_def);
+    $("#mdl-rekening .form-control").val('');
+  }
+</script>
 <?php $this->load->view('themes/front/view_footer') ?>
