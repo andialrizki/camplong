@@ -1,4 +1,8 @@
 <?php 
+	/**
+	 * [isOwnerLogin cek apakah admin login]
+	 * @return boolean [description]
+	 */
 	function isOwnerLogin()
 	{
 		$ci = &get_instance();
@@ -7,6 +11,10 @@
 		else
 			return false;
 	}
+	/**
+	 * [isSellerLogin cek apakah penjual login]
+	 * @return boolean [description]
+	 */
 	function isSellerLogin()
 	{
 		$ci = &get_instance();

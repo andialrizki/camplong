@@ -40,6 +40,9 @@ class Product extends CI_Controller
 		$post = $this->input->post('post');
 		$seller = getSellerSession();
 		switch ($act) {
+			/**
+			 * tambah produk
+			 */
 			case 'add':
 				$post['product_url'] = url_title($post['product_title'], '-', true).'-'.getRandomWord();
 				$post['product_picture'] = "product_picture_default.jpg";

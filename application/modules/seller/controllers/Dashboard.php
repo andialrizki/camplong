@@ -13,6 +13,12 @@ class Dashboard extends CI_Controller
 			redirect('seller/signin');
 		}
 	}
+	/**
+	 * method index untuk menampilkan halaman dashboard penjual
+	 * pada transaksi status 1 dan 2 untuk pemberitahuan produk yang baru diorder
+	 * untuk list status, silakan cek database: tabel @transaction lihat bagian comment
+	 * atau bisa dilihat pada helpers/myhelper_helper.php
+	 */
 	function index()
 	{
 		$seller = getSellerSession();

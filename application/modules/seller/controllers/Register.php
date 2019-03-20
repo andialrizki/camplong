@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 17/10/2018
+ * pendaftaran penjual
  */
 class Register extends CI_Controller
 {
@@ -29,9 +29,9 @@ class Register extends CI_Controller
 				$cekHp = $this->db->where('seller_nohp', $post['seller_nohp'])->get('seller');
 				if ($cekHp->num_rows() == 0) {
 					$post['seller_password'] = trim(createPassword($post['seller_password']));
-					$post['seller_picture'] = "seller_default_img.jpg";
-					$post['seller_balance'] = 0;
-					$post['seller_status']  = 1;
+					$post['seller_picture'] = "seller_default_img.jpg"; //foto profil default
+					$post['seller_balance'] = 0; // saldo diset 0
+					$post['seller_status']  = 1; //status aktif
 					$this->db->insert('seller', $post);
 					$this->session->set_flashdata('reg_success', true);
 					redirect('seller/register/success');

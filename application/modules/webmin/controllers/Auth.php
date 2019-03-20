@@ -1,5 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk proses login admin
+ */
 Class Auth extends CI_Controller {
 	function __construct()
 	{

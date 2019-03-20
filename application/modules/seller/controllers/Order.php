@@ -13,6 +13,11 @@ class Order extends CI_Controller
 			redirect('seller/signin');
 		}
 	}
+	/**
+	 * halaman pesanan penjual, menampilkan daftar pesanan
+	 * untuk status transkasi bisa diliat di database, tabel: transaction cek bagian comment
+	 * atau pada helpers/myhelper_helper.php
+	 */
 	function index()
 	{
 		$seller = getSellerSession();
@@ -43,6 +48,10 @@ class Order extends CI_Controller
 		$data['filter'] = $filter;
 		$this->load->view('view_order', $data);
 	}
+	/**
+	 * method recap,sama dengan index, hanya ditambahkan header agar bisa didownload menjadi format excel
+	 * @return [type] [description]
+	 */
 	function recap()
 	{
 		$filename = 'Rekap-Pesanan-di-sistem-camplong-'.date('d-m-y-H-i-s');
@@ -79,6 +88,11 @@ class Order extends CI_Controller
 		$data['filter'] = $filter;
 		$this->load->view('xls_order_recap', $data);
 	}
+	/**
+	 * method detail, melihat detail pesanan (order)
+	 * @param  [type] $code [nomor transaksi]
+	 * @return [type]       [description]
+	 */
 	function detail($code)
 	{
 		$seller = getSellerSession();
@@ -89,6 +103,11 @@ class Order extends CI_Controller
 			->get_where('transaction', ['transaction_code'=>$code, 'transaction_seller_id'=>$seller->id]);
 		$this->load->view('view_order_detail', $data);
 	}
+	/**
+	 * method accept, jika penjual mengkonfirmasi pesanan dan akan segera dikirim
+	 * @param  [type] $code [nomor transaksi]
+	 * @return [type]       [description]
+	 */
 	function accept($code)
 	{
 		$seller = getSellerSession();
@@ -102,6 +121,11 @@ class Order extends CI_Controller
 			redirect('seller/order');
 		}
 	}
+	/**
+	 * method reject, jika penjual menolak pesanan
+	 * @param  [type] $code [nomor transksi]
+	 * @return [type]       [description]
+	 */
 	function reject($code)
 	{
 		$seller = getSellerSession();
@@ -115,6 +139,11 @@ class Order extends CI_Controller
 			redirect('seller/order');
 		}
 	}
+	/**
+	 * method updateresi, jika penjual sudah mengirimkan barang, maka selanjutnya penjual akan menginput nomor resi
+	 * @param  [type] $code [nomor transaksi]
+	 * @return [type]       [description]
+	 */
 	function updateresi($code)
 	{
 		$seller = getSellerSession();

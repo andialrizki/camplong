@@ -1,7 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 21/10/2018
+ * class ini berfungsi untuk kelola pembayaran oleh penjual
+ * akun bank dan pencairan saldo
  */
 class Payment extends CI_Controller
 {
@@ -64,6 +65,10 @@ class Payment extends CI_Controller
 				'message'=>'Data bank berhasil dihapus']);
 		redirect('seller/payment');
 	}
+	/**
+	 * method request_fund ini untuk penjual yang mengajukan pencairan saldo
+	 * @return [type] [description]
+	 */
 	function request_fund()
 	{
 		$seller = getSellerSession();

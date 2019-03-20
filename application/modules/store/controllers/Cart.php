@@ -1,11 +1,14 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 23/10/2018
+ * class ini untuk proses transaksi (belanja) oleh pembeli
  */
 class Cart extends CI_Controller
 {
-	
+	/**
+	 * [$rj_type adalah tipe paket API RajaOngkir]
+	 * @var [type]
+	 */
 	private $rj_type;
 	function __construct()
 	{
@@ -19,6 +22,10 @@ class Cart extends CI_Controller
 		$data['data'] = $this->getCart();
 		$this->load->view('view_cart', $data);
 	}
+	/**
+	 * [getCart mengambil data cart (session) lalu diolah dan dikelompokkan berdasarkan penjual, jika pembeli belanja lebih dari 1 penjual]
+	 * @return [type] [description]
+	 */
 	private function getCart()
 	{
 		$cart = $this->cart->contents();
@@ -37,6 +44,11 @@ class Cart extends CI_Controller
 		}
 		return $seller;
 	}
+	/**
+	 * [resume untuk proses selanjutnya setelah menambahkan barang ke cart (keranjang), dilakukan pengecekan apakah barang stoknya masih adaa apa sudah habis
+	 * jika sudah habis maka tidak bisa lanjut, pembeli harus menghapus produk tsb di cart (keranjang)nya terlebih dahulu.]
+	 * @return [type] [description]
+	 */
 	function resume()
 	{
 		$dt = $this->cart->contents();
@@ -53,6 +65,10 @@ class Cart extends CI_Controller
 			}
 		}
 		if ($ready) {
+			/**
+			 * jika yang order pelanggan sudah login maka lanjut ke checkout, jika belum tampilkan halaman resume (ringkasan order,selanjutnya diarahkan
+			 * untuk daftar (membuat akun) atau login)
+			 */
 			if(isCustomerLogin())
 				redirect('store/cart/checkout');
 			else
@@ -63,6 +79,10 @@ class Cart extends CI_Controller
 		}
 
 	}
+	/**
+	 * [checkout adalah halaman checkout order]
+	 * @return [type] [description]
+	 */
 	function checkout()
 	{
 		if (isCustomerLogin()) {
@@ -78,20 +98,24 @@ class Cart extends CI_Controller
 			redirect('customer/signin?source=cart');
 		}
 	}
+	/**
+	 * proses checkout 
+	 * @return [type] [description]
+	 */
 	function checkout_process()
 	{
-		$data = $this->input->post('post');
-		$seller = $this->input->post('seller');
-		$courier_code = $this->input->post('courier_code');
-		$courier_cost = $this->input->post('courier_cost');
-		$courier_service = $this->input->post('courier_service');
-		$cr = $this->getCart();
+		$data = $this->input->post('post'); //ambil data dari array post
+		$seller = $this->input->post('seller'); //id penjual (array) 
+		$courier_code = $this->input->post('courier_code'); //kode jasa pengiriman,JNE,JNT,POS,dll
+		$courier_cost = $this->input->post('courier_cost'); //ongkir
+		$courier_service = $this->input->post('courier_service'); //layanan jasa pengiriman, contoh: JNE REGULER, POS KILAT
+		$cr = $this->getCart(); // ambil data dari cart (session) yang sudah dikelompokkan berdasarkan penjual
 		$cust = getCustomerSession();
 		$index = 0;
 		$code = "";
 		foreach ($cr as $d) {
 			$code = "CPG-".strtoupper(uniqid());
-			$data['transaction_code'] = $code;
+			$data['transaction_code'] = $code; // buat nomor transaksi
 			$data['transaction_datetime'] = date('Y-m-d H:i:s');
 			$data['transaction_seller_id']	= $d['seller_id'];
 			$data['transaction_customer_id'] = $cust->id;
@@ -106,13 +130,17 @@ class Cart extends CI_Controller
 			$prod_val = 0;
 			foreach ($d['cart'] as $cart) {
 				$opt = $this->cart->product_options($cart['rowid']);
-				$prod_val += $cart['price'];
-				$tot_weight += ($opt['weight']*$cart['qty']);
+				$prod_val += $cart['price']; // jumlahkan harga produk (menjadi nilai produk, diluar ongkir)
+				$tot_weight += ($opt['weight']*$cart['qty']); // jumlahkan berat, qty (kuantiti) juga dihitung
 			}
-			$data['transaction_product_value'] = $prod_val;
-			$data['transaction_weight'] = $tot_weight;
-			$data['transaction_total_pay'] = $prod_val + $courier_cost[$index];
+			$data['transaction_product_value'] = $prod_val; //nilai produk,diluar ongkir
+			$data['transaction_weight'] = $tot_weight; 
+			$data['transaction_total_pay'] = $prod_val + $courier_cost[$index]; //total yg harus dibayar (hrg total produk + ongkir)
 			$this->db->insert('transaction', $data);
+			
+			/**
+			 * tabel pembantu, transaction_product
+			 */
 			foreach ($d['cart'] as $cart) {
 				$opt = $this->cart->product_options($cart['rowid']);
 				$prod['transprod_product_id'] = $cart['id'];
@@ -126,11 +154,20 @@ class Cart extends CI_Controller
 		}
 		sleep(0.5);
 		$this->cart->destroy();
+		/**
+		 * [$index, jika penjual hanya 1, arahkan ke detail order produk tersebut, jika lebih dari 1 penjual arahkan ke halaman order untuk selanjutnya tata cara pembayarannya]
+		 * @var [type]
+		 */
 		if($index == 1)
 			redirect('store/cart/payment/'.$code);
 		else
 			redirect('store/cart/payment');
 	}
+	/**
+	 * [payment method ini untuk detail pembayaran yang harus dibayarkan oleh pembeli]
+	 * @param  string $code [nomor transaksi]
+	 * @return [type]       [description]
+	 */
 	function payment($code = '')
 	{
 		$cust = getCustomerSession();
@@ -160,6 +197,12 @@ class Cart extends CI_Controller
 			$this->load->view('view_payment', $data);
 		}
 	}
+	/**
+	 * [payment_confirm method ini untuk memproses konfirmasi jika telah dilakukan pembayaran oleh pembeli]
+	 * @param  [type] $code [nomor transaksi]
+	 * @param  [type] $tid  [id transaksi (dari database)]
+	 * @return [type]       [description]
+	 */
 	private function payment_confirm($code, $tid)
 	{
 		$data = $this->input->post('dt');
@@ -204,6 +247,9 @@ class Cart extends CI_Controller
 			redirect('store/cart/payment/'.$code);
 		}
 	}
+	/**
+	 * [add_to_cart, method ini untuk menyimpan sementara produk yang ditambahkan pembeli ke cart (keranjang), menggunakan library cart bawaan codeigniter menggunakan session]
+	 */
 	function add_to_cart()
 	{
 		header('Content-Type:application/json');
@@ -231,6 +277,11 @@ class Cart extends CI_Controller
 			echo json_encode(['status'=>'error', 'message' => 'Product not found.']);
 		}
 	}
+	/**
+	 * [update_item method ini untuk update item cart]
+	 * @param  string $id [id cart]
+	 * @return [type]     [description]
+	 */
 	function update_item($id='')
 	{
 		$item = $this->cart->get_item($id);
@@ -281,6 +332,10 @@ class Cart extends CI_Controller
 		$d = $this->db->get_where('subdistrict', ['subdistrict_city_id'=>$city])->result();
 		echo json_encode($d, JSON_PRETTY_PRINT);
 	}
+	/**
+	 * [get_cost method ini untuk mengecek ongkos kirim yang menggunakan API RajaOngkir]
+	 * @return [type] [description]
+	 */
 	function get_cost()
 	{
 		header('Content-Type:application/json');

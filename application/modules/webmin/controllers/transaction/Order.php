@@ -1,5 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk menampilkan semua transaksi
+ */
 Class Order extends CI_Controller {
 	protected $table = "transaction";
 	protected $primary_id = "transaction_id";

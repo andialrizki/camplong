@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 25/10/2018
+ * Class untuk login pelanggan
  */
 class Signin extends CI_Controller
 {
@@ -30,6 +30,9 @@ class Signin extends CI_Controller
 		$cek = $this->db->where('customer_email', $ids)->or_where('customer_nohp', $ids)->get('customer');
 		if ($cek->num_rows() > 0) {
 			$d = $cek->row();
+			/**
+			 * Cek password yang telah dienkripsi
+			 */
 			if (checkPassword($pass, $d->customer_password)) {
 				$this->session->set_userdata('customer', [
 					'islogin' => true,

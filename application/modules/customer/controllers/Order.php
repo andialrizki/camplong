@@ -23,6 +23,9 @@ class Order extends CI_Controller
 			->result();
 		$this->load->view('view_order', $data);
 	}
+	/*
+		Detail order
+	 */
 	function detail($code)
 	{
 		$cust = getCustomerSession();
@@ -34,6 +37,11 @@ class Order extends CI_Controller
 			->get_where('transaction', ['transaction_code'=>$code, 'transaction_customer_id'=>$cust->id]);
 		$this->load->view('view_order_detail', $data);
 	}
+	/**
+	 * method jika barang telah diterima oleh pembeli
+	 * @param  string $code [nomor transaksi]
+	 * @return [type]       [description]
+	 */
 	function received($code='')
 	{
 		$cust = getCustomerSession();
@@ -50,6 +58,11 @@ class Order extends CI_Controller
 			redirect('customer/order');
 		}
 	}
+	/**
+	 * Pemberian rating kepada penjual berdasarkan transaksi
+	 * @param  string $code [nomor transaksi]
+	 * @return [type]       [description]
+	 */
 	function rating($code='')
 	{
 		$cust = getCustomerSession();
@@ -74,6 +87,11 @@ class Order extends CI_Controller
 			redirect('customer/order');
 		}
 	}
+	/**
+	 * method untuk melacak posisi kiriman berdasarkan nomor resi dari jasa pengiriman (kurir), menggunakan API RajaOngkir
+	 * @param  string $code [nomor resi]
+	 * @return [type]       [description]
+	 */
 	function tracking($code='')
 	{
 		$cust = getCustomerSession();

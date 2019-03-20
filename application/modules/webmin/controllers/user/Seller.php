@@ -1,5 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk melihat akun penjual
+ */
 Class Seller extends CI_Controller {
 	protected $table = "seller";
 	protected $primary_id = "seller_id";

@@ -1,6 +1,9 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
-Class Category extends CI_Controller {
+/**
+ * [kategori produk]
+ * @var string
+ */
 	protected $table = "category";
 	protected $primary_id = "category_id";
 	protected $module_url = "webmin/product/category";

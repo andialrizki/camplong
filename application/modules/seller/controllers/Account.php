@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 20/10/2018
+ * Class untuk kelola akun penjuals
  */
 class Account extends CI_Controller
 {
@@ -30,6 +30,10 @@ class Account extends CI_Controller
 		$post = $this->input->post('post');
 		$loc  = $this->input->post('loc');
 		$loc['selloc_seller_id'] = $seller->id;
+		/**
+		 * Melakukan pengecekan email dan nomor hp,jika penjual mencoba mengubah email dan no hp yg sudah terdaftar pada database maka tidak bisa
+		 * Jika tidak ada maka lanjutkan proses
+		 */
 		$cekEmail = $this->db->get_where('seller', ['seller_email'=>$post['seller_email'], 'seller_id !=' => $seller->id])->num_rows();
 		if ($cekEmail == 0) {
 			$cekHp = $this->db->get_where('seller', ['seller_nohp'=>$post['seller_nohp'], 'seller_id !=' => $seller->id])->num_rows();
@@ -51,6 +55,10 @@ class Account extends CI_Controller
 		}
 		redirect('seller/account');
 	}
+	/**
+	 * Method untuk mengambil data kota dan kecamatan, output berupa json
+	 * @return [type] [description]
+	 */
 	function get_city()
 	{
 		header('Content-Type:application/json');

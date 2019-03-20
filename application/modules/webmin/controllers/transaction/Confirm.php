@@ -1,5 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk mengelola konfirmasi pembayaran transaksi pembelian produk
+ */
 Class Confirm extends CI_Controller {
 	protected $table = "transaction_confirm";
 	protected $primary_id = "transconf_id";

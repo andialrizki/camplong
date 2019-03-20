@@ -1,5 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk kelola akun bank admin, nantinya akan ditampilkan pada saat pembeli melakukan order dan akan diarahkan untuk mentransfer ke rekening ini
+ */
 Class Bank extends CI_Controller {
 	protected $table = "owner_bank";
 	protected $primary_id = "bank_id";

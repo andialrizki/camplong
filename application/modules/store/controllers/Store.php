@@ -10,6 +10,10 @@ class Store extends CI_Controller
 	{
 		parent::__construct();
 	}
+	/**
+	 * [index method ini untuk halaman pasar (produk yang dijual penjual)]
+	 * @return [type] [description]
+	 */
 	function index()
 	{
 		$data['data'] = $this->db

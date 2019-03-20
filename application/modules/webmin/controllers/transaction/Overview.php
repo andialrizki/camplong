@@ -1,5 +1,10 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk menampilkan ringkasan jumlah transaksi berdasarkan beberapa kondisi
+ * untuk status transaksi, kodenya bisa dilihat di database, tabel: transaction, cek pada bagian comment
+ * atau pada helper: helpers/myhelper_helper.php
+ */
 Class Overview extends CI_Controller {
 	protected $table = "transaction";
 	protected $primary_id = "transaction_id";

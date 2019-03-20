@@ -1,6 +1,10 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 Class Reqfund extends CI_Controller {
+	/**
+	 * untuk mengkonfirmasi dan memproses permintaan pencairan dana oleh penjual
+	 * @var string
+	 */
 	protected $table = "reqfund";
 	protected $primary_id = "reqfund_id";
 	protected $module_url = "webmin/seller/reqfund";
@@ -30,6 +34,11 @@ Class Reqfund extends CI_Controller {
 		}
 		$this->load->view('seller/view_reqfund', $data);
 	}
+	/**
+	 * tolak pengajuan pencairan saldo,saldo dikembalikan kepada penjual
+	 * @param  [type] $id [id permintaan pencairan saldo]
+	 * @return [type]     [description]
+	 */
 	function reject($id)
 	{
 		$qseller = $this->db
@@ -45,6 +54,11 @@ Class Reqfund extends CI_Controller {
 		}
 		redirect($this->module_url);
 	}
+	/**
+	 * terima pengajuan pencairan saldo, selanjutnya admin diharuskan mentransfer ke rekening penjual lalu mengkonfirmasinya kembali dengan mengklik tombol selesai
+	 * @param  [type] $id [id permintaan pencairan saldo]
+	 * @return [type]     [description]
+	 */
 	function accept($id)
 	{
 		$qseller = $this->db
@@ -57,6 +71,11 @@ Class Reqfund extends CI_Controller {
 		}
 		redirect($this->module_url);
 	}
+	/**
+	 * konfirmasi sudah transfer oleh admin ke rekening penjual
+	 * @param  [type] $id [id permintaan pencairan saldo]
+	 * @return [type]     [description]
+	 */
 	function finish($id)
 	{
 		$qseller = $this->db

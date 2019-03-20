@@ -13,6 +13,9 @@ class Home extends CI_Controller
 	function index()
 	{
 		$data['bn'] = $this->db->get_where('banner', ['banner_status'=>1]);
+		/**
+		 * ambil list penjual dan lokasinya, untuk ditampilkan di maps
+		 */
 		$data['selloc'] = $this->db
 			->select('seller_name, seller_address,selloc_lat,selloc_lng')
 			->join('seller', 'seller_id = selloc_seller_id')

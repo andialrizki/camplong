@@ -20,16 +20,29 @@ class Register extends CI_Controller
 		$data['source']	= $this->input->get('source');
 		$this->load->view('view_register', $data);
 	}
+	/**
+	 * method memproses pendaftaran pelanggan
+	 * @return [type] [description]
+	 */
 	function submit()
 	{
 		$post = $this->input->post('post');
 		$repass = $this->input->post('repassword');
 		$source = $this->input->get('source');
+		/**
+		 * Melakukan pengecekan apakah email, nomor hp sebelumnya apakah sudah terdaftar di database, jika belum maka proses dilanjutkan
+		 */
 		if (trim($post['customer_password']) == trim($repass)) {
 			$cekEmail = $this->db->where('customer_email', $post['customer_email'])->get('customer');
 			if ($cekEmail->num_rows() == 0) {
 				$cekHp = $this->db->where('customer_nohp', $post['customer_nohp'])->get('customer');
 				if ($cekHp->num_rows() == 0) {
+					/**
+					 * melakukan enkripsi terhadap password
+					 * menset foto profil pelanggan default
+					 * menset saldo 0
+					 * menset status aktif (1)
+					 */
 					$post['customer_password'] = trim(createPassword($post['customer_password']));
 					$post['customer_picture'] = "customer_default_img.jpg";
 					$post['customer_balance'] = 0;

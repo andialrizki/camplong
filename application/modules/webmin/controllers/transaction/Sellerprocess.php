@@ -1,5 +1,8 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * class ini untuk menampilkan transaksi yang sedang diproses penjual
+ */
 Class Sellerprocess extends CI_Controller {
 	protected $table = "transaction";
 	protected $primary_id = "transaction_id";

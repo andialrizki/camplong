@@ -1,6 +1,10 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 Class Show extends CI_Controller {
+	/**
+	 * tampilkan produk 
+	 * @var string
+	 */
 	protected $table = "product";
 	protected $primary_id = "product_id";
 	protected $module_url = "webmin/product/show";

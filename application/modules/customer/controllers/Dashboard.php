@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 19/10/2018
+ * Halaman Dashboard Pelanggan
  */
 class Dashboard extends CI_Controller
 {

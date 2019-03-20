@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 17/10/2018
+ * login penjual
  */
 class Signin extends CI_Controller
 {

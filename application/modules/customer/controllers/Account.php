@@ -1,7 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 20/10/2018
+ * 			class untuk kelola akun pelanggan
  */
 class Account extends CI_Controller
 {
@@ -39,6 +39,9 @@ class Account extends CI_Controller
 		}
 		redirect('customer/account');
 	}
+	/*
+		method mengambil data kota dan kecamatan, ouput berupa json
+	 */
 	function get_city()
 	{
 		header('Content-Type:application/json');
